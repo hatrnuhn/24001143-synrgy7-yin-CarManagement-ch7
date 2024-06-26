@@ -1,27 +1,30 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useState } from 'react'
 import './App.css'
-import HomePage from './pages'
+import { AdminLoginPage, DashboardPage, HomePage, SearchPage, PlaygroundPage, AdminLogoutPage } from './pages'
+import { AdminProtected } from './components';
+import { AuthProvider } from './contexts/Auth';
 
 function App() {
 
   return (
-    <div>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path='/' element={<HomePage />}/>
           <Route path='/*' element={<Navigate to='/' />} />
-          <Route path='/dashboard/*' element={
-            <>
+          <Route path='/search' element={<SearchPage />} />
+          <Route path='/admin/login' element={<AdminLoginPage />} />
+          <Route path='/admin/*' element={<AdminProtected redirectTo='/admin/login' children={
               <Routes>
-                <Route path='/' element={<h1>MAIN</h1>} />
-                <Route path='/user-profile' element={<h1>USER PROFILE</h1>}/>
+                <Route path='/dashboard' element={<DashboardPage />} />
+                <Route path='/playground' element={<PlaygroundPage />} /> 
+                <Route path='/logout' element={<AdminLogoutPage />} />
               </Routes>
-            </>
+            } />
           } />
         </Routes>
       </Router>
-    </div>
+    </AuthProvider>
   )
 }
 
