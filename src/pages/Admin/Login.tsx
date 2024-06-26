@@ -49,7 +49,7 @@ const AdminLogin = () => {
         }
 
         checkRefreshToken()
-    }, [])
+    }, [axios, setIsAuthenticated])
 
     return (
         <>

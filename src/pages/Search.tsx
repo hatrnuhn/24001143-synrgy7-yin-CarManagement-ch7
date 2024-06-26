@@ -54,7 +54,7 @@ const Search = () => {
     useEffect(() => {
         if (driver && date && pickupTime && capacity) 
             fetchCars()
-    }, [])
+    }, [driver, date, pickupTime, capacity])
 
     return (
         <>

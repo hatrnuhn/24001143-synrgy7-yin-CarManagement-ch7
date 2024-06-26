@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 const Home = () => {
-    const [count, setCount] = useState(0)
-
     const closeNav = () => {
         const element = document.getElementById("hero__side-nav")
         

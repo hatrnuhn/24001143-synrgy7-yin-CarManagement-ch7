@@ -55,7 +55,7 @@ const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
         }
 
         checkAuthentication()
-    }, [])
+    }, [axios, isForbidden, setIsAuthenticated])
 
     if (loading) return (<h3>Please wait</h3>)
     else if (isForbidden) return (<Forbidden />)
