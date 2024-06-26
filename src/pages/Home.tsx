@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '/vite.svg'
 
 const Home = () => {
     const [count, setCount] = useState(0)
@@ -20,22 +18,22 @@ const Home = () => {
     }
 
     useEffect(() => {
-        const accordionInit = () => {
-            var acc = document.getElementsByClassName("accordion");
-            var i;
+        // const accordionInit = () => {
+        //     var acc = document.getElementsByClassName("accordion");
+        //     var i;
 
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", (event) => {
-                    this.classList.toggle("active");
-                    var panel = this.nextElementSibling;
-                    if (panel.style.maxHeight) {
-                        panel.style.maxHeight = null;
-                    } else {
-                        panel.style.maxHeight = panel.scrollHeight + "px";
-                    } 
-                });
-            }
-        }
+        //     for (i = 0; i < acc.length; i++) {
+        //         acc[i].addEventListener("click", (event) => {
+        //             this.classList.toggle("active");
+        //             var panel = this.nextElementSibling;
+        //             if (panel.style.maxHeight) {
+        //                 panel.style.maxHeight = null;
+        //             } else {
+        //                 panel.style.maxHeight = panel.scrollHeight + "px";
+        //             } 
+        //         });
+        //     }
+        // }
     }, [])
     
     return (
