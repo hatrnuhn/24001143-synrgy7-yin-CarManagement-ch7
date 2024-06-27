@@ -1,0 +1,26 @@
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+#root {
+    margin: 0;
+    /* 1 */
+    line-height: inherit;
+    /* 2 */
+}
+  
+#root {
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding: 0px;
+}
+  
+@media (min-width: 640px) {
+    #root {
+      gap: 100px;
+    }
+}
+  

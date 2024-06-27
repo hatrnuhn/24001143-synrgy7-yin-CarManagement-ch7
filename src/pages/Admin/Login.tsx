@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { Navigate } from "react-router"
+import { Navigate, useNavigate } from "react-router"
 import { Button, TextField } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import useAxios from "../../axios"
@@ -19,16 +19,18 @@ const AdminLogin = () => {
         mode: 'onSubmit'
     })
 
+    const navigate = useNavigate()
+
     const axios = useAxios()
 
-    const { isAuthenticated, setIsAuthenticated } = useAuth() as AuthContextType
+    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useAuth() as AuthContextType
 
     const onSubmit: SubmitHandler<LoginValues> = async (data) => {
         try {
             await axios.post('/auth/login', {...data, role: 'admin'}, {withCredentials: true})
 
             setIsAuthenticated(true)
-            window.location.href = '/admin/dashboard'    
+            navigate('/admin/dashboard')    
         } catch (err) {
             setIsAuthenticated(false)
         }
@@ -45,6 +47,8 @@ const AdminLogin = () => {
                 setIsAuthenticated(true)                    
             } catch (err) {
                 setIsAuthenticated(false)
+            } finally {
+                setIsLoading(false)
             }
         }
 
@@ -54,7 +58,7 @@ const AdminLogin = () => {
     return (
         <>
             {
-                (!isAuthenticated ? 
+                (!isAuthenticated && !isLoading ? 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <TextField {...register('email')} label='Email' variant='outlined' />
                         <TextField {...register('password')} label='Password' variant='outlined' type="password"/>

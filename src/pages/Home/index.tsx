@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import AccordionList from './AccordionList'
 import FooterSocmedIcons from './FooterSocmedIcons'
 import NavList from './NavList'
@@ -6,7 +7,9 @@ import ServicesList from './ServicesList'
 import SideNav from './SideNav'
 import WhyList from './WhyList'
 
-const Home = () => {    
+const Home = () => {   
+    const navigate = useNavigate() 
+
     return (
       <>
         <section className="hero w-full box-border bg-bcr-lighterblue flex flex-col justify-between overflow-x-clip sm:flex-row">
@@ -26,7 +29,7 @@ const Home = () => {
                 </div>
         
                 <div className="w-91prcnt sm:w-full">
-                    <button className="button bg-bcr-limegreen self-start" type="button" onClick={() => window.location.href='/search'}>Mulai Sewa Mobil</button>
+                    <button className="button bg-bcr-limegreen self-start" type="button" onClick={() => navigate('/search')}>Mulai Sewa Mobil</button>
                 </div>    
             </div>
 
@@ -75,7 +78,7 @@ const Home = () => {
                     <h2>Sewa Mobil di (Lokasimu) Sekarang!</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis odio quo perspiciatis distinctio, quis fuga tempora labore ab neque?</p>    
                 </div>
-                <button type="button" className="button" onClick={() => window.location.href='/search'}>Mulai Sewa Mobil</button>
+                <button type="button" className="button" onClick={() => navigate('/search')}>Mulai Sewa Mobil</button>
             </div>
         </section>
 

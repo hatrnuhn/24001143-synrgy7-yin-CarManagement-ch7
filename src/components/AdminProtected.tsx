@@ -10,8 +10,7 @@ interface ProtectedProps {
 }
 
 const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
-    const { isAuthenticated, setIsAuthenticated } = useAuth() as AuthContextType
-    const [loading, setLoading] = useState(true)
+    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useAuth() as AuthContextType
     const [isForbidden, setIsForbidden] = useState(false)
 
     const axios = useAxios()
@@ -50,14 +49,14 @@ const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
                     }
                 }
             } finally {
-                setLoading(false)
+                setIsLoading(false)
             }
         }
 
         checkAuthentication()
     }, [axios, isForbidden, setIsAuthenticated])
 
-    if (loading) return (<h3>Please wait</h3>)
+    if (isLoading) return (<h3>Please wait</h3>)
     else if (isForbidden) return (<Forbidden />)
     else return (!isAuthenticated) ? <Navigate to={redirectTo} /> : children
 }
