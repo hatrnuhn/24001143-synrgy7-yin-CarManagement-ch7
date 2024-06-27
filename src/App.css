@@ -825,23 +825,23 @@ p {
 }
 
 .joe-swanson-img {
-  background-image: url(../images/joe-swanson.png);
+  background-image: url(./images/joe-swanson.png);
 }
 
 .john-doe-img {
-  background-image: url(../images/john-doe.png);
+  background-image: url(./images/john-doe.png);
 }
 
 .jane-doe-img {
-  background-image: url(../images/jane-doe.png);
+  background-image: url(./images/jane-doe.png);
 }
 
 .leslie-knope-img {
-  background-image: url(../images/leslie-knope.png);
+  background-image: url(./images/leslie-knope.png);
 }
 
 .stanley-hudson-img {
-  background-image: url(../images/stanley-hudson.png);
+  background-image: url(./images/stanley-hudson.png);
 }
 
 .star-icon {

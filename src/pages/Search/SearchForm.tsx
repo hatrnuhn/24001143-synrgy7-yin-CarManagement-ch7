@@ -51,14 +51,18 @@ const SearchForm = () => {
     
     useEffect(() => {
         const searchStylesLink = document.createElement('link')
-        const appStyleElement = document.querySelector('style[data-vite-dev-id*="App.css"]')
+        const appStyleElementDev = document.querySelector('style[data-vite-dev-id*="App.css"]') // FOR DEVELOPMENT
+        const appStyleElementProd = document.querySelector('link[href^="/assets/index"]') // FOR PRODUCITON (COMPILED)
         
         const switchStyles = () => {
             searchStylesLink.rel='stylesheet'
             searchStylesLink.href='styles/Search.css'
             
             document.head.appendChild(searchStylesLink)
-            document.head.removeChild(appStyleElement!)
+            if (appStyleElementDev)
+                document.head.removeChild(appStyleElementDev)
+            if (appStyleElementProd)
+                document.head.removeChild(appStyleElementProd)
         }
 
         if (driver && date && pickupTime && capacity) 
@@ -68,7 +72,10 @@ const SearchForm = () => {
 
         return () => {
             document.head.removeChild(searchStylesLink)
-            document.head.append(appStyleElement!)
+            if (appStyleElementDev)
+                document.head.append(appStyleElementDev)
+            if (appStyleElementProd)
+                document.head.append(appStyleElementProd)
         }
     }, [driver, date, pickupTime, capacity])
 
