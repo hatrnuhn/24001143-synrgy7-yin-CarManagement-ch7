@@ -61,7 +61,7 @@ html,
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
 */
 
-body {
+#root {
   margin: 0;
   /* 1 */
   line-height: inherit;
@@ -444,7 +444,7 @@ video {
   display: none;
 }
 
-body {
+#root {
   margin: 0px;
   display: flex;
   flex-direction: column;
@@ -453,7 +453,7 @@ body {
 }
 
 @media (min-width: 640px) {
-  body {
+  #root {
     gap: 100px;
   }
 }
@@ -671,7 +671,7 @@ p {
 }
 
 .hero__img-png {
-  background-image: url(../public/images/kar.png);
+  background-image: url(../images/kar.png);
   background-position: bottom;
   background-repeat: no-repeat;
   background-size: contain;
@@ -736,7 +736,7 @@ p {
 /* services section */
 
 .services__img {
-  background-image: url(../public/images/gurl.png);
+  background-image: url(../images/gurl.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -851,23 +851,23 @@ p {
 }
 
 .joe-swanson-img {
-  background-image: url(../public/images/joe-swanson.png);
+  background-image: url(../images/joe-swanson.png);
 }
 
 .john-doe-img {
-  background-image: url(../public/images/john-doe.png);
+  background-image: url(../images/john-doe.png);
 }
 
 .jane-doe-img {
-  background-image: url(../public/images/jane-doe.png);
+  background-image: url(../images/jane-doe.png);
 }
 
 .leslie-knope-img {
-  background-image: url(../public/images/leslie-knope.png);
+  background-image: url(../images/leslie-knope.png);
 }
 
 .stanley-hudson-img {
-  background-image: url(../public/images/stanley-hudson.png);
+  background-image: url(../images/stanley-hudson.png);
 }
 
 .star-icon {
