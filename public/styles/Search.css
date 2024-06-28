@@ -929,6 +929,10 @@ p {
   gap: 2rem;
 }
 
+.gap-2 {
+  gap: 0.5rem;
+}
+
 .gap-1 {
   gap: 0.25rem;
 }
@@ -1172,6 +1176,10 @@ p {
     justify-content: space-between;
   }
 
+  .md\:gap-4 {
+    gap: 1rem;
+  }
+
   .md\:gap-0 {
     gap: 0px;
   }
@@ -1205,5 +1213,9 @@ p {
   .lg\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .lg\:gap-8 {
+    gap: 2rem;
   }
 }

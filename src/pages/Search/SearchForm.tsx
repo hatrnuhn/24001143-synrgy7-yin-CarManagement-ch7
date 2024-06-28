@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useSearchParams } from "react-router-dom"
 import useAxios from "../../axios"
+import CarSearchResultItem from "../../components/CarSearchResultItem"
 
 type SearchFormType = {
     driver: 'yes' | 'no' | '',
     date: string,
     pickupTime: string,
-    capacity: 'coupe' | 'small' | 'medium' | 'large' | ''
+    capacity: 'xs' | 'sm' | 'md' | 'lg' | ''
 }
 
 const SearchForm = () => {
@@ -18,7 +19,7 @@ const SearchForm = () => {
     const driver = searchParams.get('driver') as 'yes' | 'no' | ''
     const date = searchParams.get('date')
     const pickupTime = searchParams.get('pickupTime')
-    const capacity = searchParams.get('capacity') as 'coupe' | 'small' | 'medium' | 'large' | ''
+    const capacity = searchParams.get('capacity') as 'xs' | 'sm' | 'md' | 'lg' | ''
 
     const {register, handleSubmit} = useForm<SearchFormType>({
         defaultValues: {
@@ -48,35 +49,10 @@ const SearchForm = () => {
 
         await fetchCars()
     }
-    
-    useEffect(() => {
-        const searchStylesLink = document.createElement('link')
-        const appStyleElementDev = document.querySelector('style[data-vite-dev-id*="App.css"]') // FOR DEVELOPMENT
-        const appStyleElementProd = document.querySelector('link[href^="/assets/index"]') // FOR PRODUCITON (COMPILED)
-        
-        const switchStyles = () => {
-            searchStylesLink.rel='stylesheet'
-            searchStylesLink.href='styles/Search.css'
-            
-            document.head.appendChild(searchStylesLink)
-            if (appStyleElementDev)
-                document.head.removeChild(appStyleElementDev)
-            if (appStyleElementProd)
-                document.head.removeChild(appStyleElementProd)
-        }
 
+    useEffect(() => {
         if (driver && date && pickupTime && capacity) 
             fetchCars()
-
-        switchStyles()
-
-        return () => {
-            document.head.removeChild(searchStylesLink)
-            if (appStyleElementDev)
-                document.head.append(appStyleElementDev)
-            if (appStyleElementProd)
-                document.head.append(appStyleElementProd)
-        }
     }, [driver, date, pickupTime, capacity])
 
     return (
@@ -86,7 +62,7 @@ const SearchForm = () => {
                     <div className="flex flex-col">
                         <label htmlFor="driver">Tipe Driver</label>
                         <select {...register('driver')} id="driver" defaultValue={driver ? driver : ''}>
-                            <option value="" disabled selected hidden>Pilih Tipe Driver</option>
+                            <option value="" disabled hidden>Pilih Tipe Driver</option>
                             <option value="yes">Dengan Sopir</option>
                             <option value="no">Tanpa Sopir (Lepas Kunci)</option>
                         </select>
@@ -104,12 +80,12 @@ const SearchForm = () => {
 
                     <div className="flex flex-col">
                         <label htmlFor="seats">Jumlah Penumpang (optional)</label>
-                        <select {...register('capacity')} name="seats" id="seats" defaultValue={capacity ? capacity : ''}>
-                            <option value="" disabled selected hidden>Jumlah Penumpang</option>
-                            <option value="coupe">1-2 Orang</option>
-                            <option value="small">2-4 Orang</option>
-                            <option value="medium">4-6 Orang</option>
-                            <option value="large">6+ Orang</option>
+                        <select {...register('capacity')} id="seats" defaultValue={capacity ? capacity : ''}>
+                            <option value="" disabled hidden>Jumlah Penumpang</option>
+                            <option value="sx">1-2 Orang</option>
+                            <option value="sm">2-4 Orang</option>
+                            <option value="md">4-6 Orang</option>
+                            <option value="lg">6+ Orang</option>
                         </select>
                     </div>
 
@@ -119,21 +95,19 @@ const SearchForm = () => {
                 </form>
             </section>
 
-            {(cars.length > 0) ? 
-                <div>
-                    {cars.map((c, i) => {
-                        return (
-                            <div key={i}>
-                                <p>
-                                    {c.id}
-                                </p>
-                                <img src={`https://res.cloudinary.com/daeznp0xa/image/upload/f_auto,q_auto/v1/${c.image}`} alt="" />
-                            </div>
-                        )
-                    })}
-                </div> 
-                : <></>
-            }
+            <section className="result w-full flex justify-center">
+                <div className="w-91prcnt gap-4 grid grid-cols-2 auto-rows-min md:grid-cols-3 md:gap-4 lg: lg:gap-8 lg:grid-cols-4 sm:w-81prcnt" id="placeholder">
+                    {(cars.length > 0) && 
+                        <>
+                            {cars.map((c, i) => {
+                                return (
+                                    <CarSearchResultItem key={i} car={c} />
+                                )
+                            })}
+                        </> 
+                    }
+                </div>
+            </section>
         </>
     )
 }
