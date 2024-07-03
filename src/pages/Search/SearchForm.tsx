@@ -8,12 +8,20 @@ type SearchFormType = {
     driver: 'yes' | 'no' | '',
     date: string,
     pickupTime: string,
-    capacity:  | 'sm' | 'md' | 'lg' | 'xl' | ''
+    capacity: 'sm' | 'md' | 'lg' | 'xl' | ''
+}
+
+type CarData = {
+    id: string
+    name: string
+    capacity: number
+
+    [key: string]: any
 }
 
 const SearchForm = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [cars, setCars] = useState<Record<string, string | number >[]>([])
+    const [cars, setCars] = useState<CarData[]>([])
     const axios = useAxios()
 
     const driver = searchParams.get('driver') as 'yes' | 'no' | ''
@@ -32,8 +40,9 @@ const SearchForm = () => {
     })
 
     const fetchCars = useCallback(async () => {
-        const res = await axios.get('/cars');
-        setCars(res.data);
+        const res = await axios.get('/cars')
+        
+        setCars(res.data)
     }, [axios])
 
     const onSubmit: SubmitHandler<SearchFormType> = async (data) => {
@@ -99,11 +108,28 @@ const SearchForm = () => {
                 <div className="w-91prcnt gap-4 grid grid-cols-2 auto-rows-min md:grid-cols-3 md:gap-4 lg: lg:gap-8 lg:grid-cols-4 sm:w-81prcnt" id="placeholder">
                     {(cars.length > 0) && 
                         <>
-                            {cars.map((c, i) => {
-                                return (
-                                    <CarSearchResultItem key={i} car={c} />
-                                )
-                            })}
+                            {cars
+                                .filter((c) => {
+                                    
+                                    switch (searchParams.get('capacity')) {
+                                        case 'sm':
+                                            return c.capacity < 3
+                                        case 'md':
+                                            return c.capacity < 5 && c.capacity > 2
+                                        case 'lg':
+                                            return c.capacity < 7 && c.capacity > 4
+                                        case 'xl':
+                                            return c.capacity > 6
+                                        default:
+                                            return true                                    
+                                    }
+                                })
+                                .map((c, i) => {
+                                    return (
+                                        <CarSearchResultItem key={i} car={c} />
+                                    )
+                                })
+                            }
                         </> 
                     }
                 </div>
