@@ -1,5 +1,3 @@
-
-
 import { FC, RefObject, useRef, useState } from "react"
 type AccordionItemProps = {
     title: string,

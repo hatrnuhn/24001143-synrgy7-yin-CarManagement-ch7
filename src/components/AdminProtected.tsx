@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Navigate } from "react-router-dom"
-import { AuthContextType, useAuth } from "../contexts/Auth"
+import { AuthContextType, AuthContext } from "../contexts/Auth"
 import useAxios from "../axios"
 import Forbidden from "./Forbidden"
 
@@ -10,7 +10,7 @@ interface ProtectedProps {
 }
 
 const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
-    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useAuth() as AuthContextType
+    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useContext(AuthContext) as AuthContextType
     const [isForbidden, setIsForbidden] = useState(false)
 
     const axios = useAxios()
@@ -37,7 +37,6 @@ const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
                 await fetchMe()
             } catch (error) {
                 // If /users/me fails, attempt to refresh the access token
-                console.log(isForbidden)
                 if (!isForbidden) {
                     try {
                         await axios.get('/auth/refresh-access', { withCredentials: true }) // requires refreshToken cookie
@@ -54,7 +53,7 @@ const AdminProtected: React.FC<ProtectedProps> = ({children, redirectTo}) => {
         }
 
         checkAuthentication()
-    }, [axios, isForbidden, setIsAuthenticated])
+    }, [axios, isForbidden, setIsAuthenticated, setIsLoading])
 
     if (isLoading) return (<h3>Please wait</h3>)
     else if (isForbidden) return (<Forbidden />)

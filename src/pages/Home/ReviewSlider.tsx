@@ -35,7 +35,7 @@ const ReviewSlider = () => {
         }
 
         const tinySliderInit = () => {
-            var slider = tns({
+            const slider = tns({
                 container: '.my-slider',
                 items: 1,
                 slideBy: 1,

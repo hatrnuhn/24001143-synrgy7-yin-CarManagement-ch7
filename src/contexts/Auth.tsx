@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useState } from "react"
 
 export type AuthContextType = {
     isAuthenticated: boolean,
@@ -7,7 +7,7 @@ export type AuthContextType = {
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
@@ -18,8 +18,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             {children}
         </AuthContext.Provider>
     )
-}
-
-export const useAuth = () => {
-    return useContext(AuthContext)
 }

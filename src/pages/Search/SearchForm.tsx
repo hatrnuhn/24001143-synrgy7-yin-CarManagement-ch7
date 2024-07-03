@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useSearchParams } from "react-router-dom"
 import useAxios from "../../axios"
@@ -8,18 +8,18 @@ type SearchFormType = {
     driver: 'yes' | 'no' | '',
     date: string,
     pickupTime: string,
-    capacity: 'xs' | 'sm' | 'md' | 'lg' | ''
+    capacity:  | 'sm' | 'md' | 'lg' | 'xl' | ''
 }
 
 const SearchForm = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [cars, setCars] = useState<Record<string, any>[]>([])
+    const [cars, setCars] = useState<Record<string, string | number >[]>([])
     const axios = useAxios()
 
     const driver = searchParams.get('driver') as 'yes' | 'no' | ''
     const date = searchParams.get('date')
     const pickupTime = searchParams.get('pickupTime')
-    const capacity = searchParams.get('capacity') as 'xs' | 'sm' | 'md' | 'lg' | ''
+    const capacity = searchParams.get('capacity') as 'sm' | 'md' | 'lg' | 'xl' | ''
 
     const {register, handleSubmit} = useForm<SearchFormType>({
         defaultValues: {
@@ -31,10 +31,10 @@ const SearchForm = () => {
         mode: 'onSubmit'
     })
 
-    const fetchCars = async () => {
-        const res = await axios.get('/cars')
-        setCars(res.data)
-    }
+    const fetchCars = useCallback(async () => {
+        const res = await axios.get('/cars');
+        setCars(res.data);
+    }, [axios])
 
     const onSubmit: SubmitHandler<SearchFormType> = async (data) => {
         const params = {
@@ -51,9 +51,9 @@ const SearchForm = () => {
     }
 
     useEffect(() => {
-        if (driver && date && pickupTime && capacity) 
+        if (driver && date && pickupTime && capacity)
             fetchCars()
-    }, [driver, date, pickupTime, capacity])
+    }, [driver, date, pickupTime, capacity, fetchCars])
 
     return (
         <>
@@ -82,10 +82,10 @@ const SearchForm = () => {
                         <label htmlFor="seats">Jumlah Penumpang (optional)</label>
                         <select {...register('capacity')} id="seats" defaultValue={capacity ? capacity : ''}>
                             <option value="" disabled hidden>Jumlah Penumpang</option>
-                            <option value="sx">1-2 Orang</option>
-                            <option value="sm">2-4 Orang</option>
-                            <option value="md">4-6 Orang</option>
-                            <option value="lg">6+ Orang</option>
+                            <option value="sm">1-2 Orang</option>
+                            <option value="md">2-4 Orang</option>
+                            <option value="lg">4-6 Orang</option>
+                            <option value="xl">6+ Orang</option>
                         </select>
                     </div>
 

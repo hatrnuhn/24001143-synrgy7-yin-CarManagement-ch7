@@ -1,7 +1,7 @@
 import { FC } from "react"
 
 type CarSearchResultItemProps = {
-    car: Record<string, any>
+    car: Record<string, string | number>
 }
 
 const CarSearchResultItem: FC<CarSearchResultItemProps> = ({ car }) => {

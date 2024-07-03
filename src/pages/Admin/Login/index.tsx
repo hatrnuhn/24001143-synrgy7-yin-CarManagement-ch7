@@ -1,8 +1,8 @@
-import { useEffect, useLayoutEffect } from "react"
+import { useContext, useEffect, useLayoutEffect } from "react"
 import { Navigate, useNavigate } from "react-router"
 import { SubmitHandler, useForm } from "react-hook-form"
 import useAxios from "../../../axios"
-import { AuthContextType, useAuth } from "../../../contexts/Auth"
+import { AuthContextType, AuthContext } from "../../../contexts/Auth"
 
 type LoginValues = {
     email: string,
@@ -22,7 +22,7 @@ const AdminLogin = () => {
 
     const axios = useAxios()
 
-    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useAuth() as AuthContextType
+    const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } = useContext(AuthContext) as AuthContextType
 
     const onSubmit: SubmitHandler<LoginValues> = async (data) => {
         try {
@@ -52,7 +52,7 @@ const AdminLogin = () => {
         }
 
         checkRefreshToken()
-    }, [axios, setIsAuthenticated])
+    }, [axios, setIsAuthenticated, setIsLoading])
 
     useLayoutEffect(() => {
         const adminLoginStylesLink = document.createElement('link')
