@@ -16,7 +16,7 @@ type CarData = {
     name: string
     capacity: number
 
-    [key: string]: any
+    [key: string]: string | number | string[]
 }
 
 const SearchForm = () => {
@@ -42,10 +42,27 @@ const SearchForm = () => {
     const fetchCars = useCallback(async () => {
         const res = await axios.get('/cars')
         
-        setCars(res.data)
+        setCars(res.data
+            .filter((c: Record<string, string | number | string[]>) => {
+                if (typeof c.capacity === 'number')              
+                    switch (searchParams.get('capacity')) {
+                        case 'sm':
+                            return c.capacity < 3
+                        case 'md':
+                            return c.capacity < 5 && c.capacity > 2
+                        case 'lg':
+                            return c.capacity < 7 && c.capacity > 4
+                        case 'xl':
+                            return c.capacity > 6
+                        default:
+                            return true                                    
+                    }
+            })
+        )
     }, [axios])
 
-    const onSubmit: SubmitHandler<SearchFormType> = async (data) => {
+    const onSubmit: SubmitHandler<SearchFormType> = async (data, event) => {
+        event?.preventDefault()
         const params = {
             driver: data.driver,
             date: data.date,
@@ -70,7 +87,7 @@ const SearchForm = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className={`flex flex-col bg-white justify-between w-91prcnt gap-4 rounded-md shadow-search text-xs p-4 lg:flex-row lg:text-sm sm:w-81prcnt`}>
                     <div className="flex flex-col">
                         <label htmlFor="driver">Tipe Driver</label>
-                        <select {...register('driver')} id="driver" defaultValue={driver ? driver : ''}>
+                        <select {...register('driver', {required: true})} id="driver" defaultValue={driver ? driver : ''}>
                             <option value="" disabled hidden>Pilih Tipe Driver</option>
                             <option value="yes">Dengan Sopir</option>
                             <option value="no">Tanpa Sopir (Lepas Kunci)</option>
@@ -79,17 +96,17 @@ const SearchForm = () => {
 
                     <div className="flex flex-col">
                         <label htmlFor="date">Tanggal</label>
-                        <input {...register('date')} type="date" id='date' />
+                        <input {...register('date', {required: true})} type="date" id='date' />
                     </div>
 
                     <div className="flex flex-col">
                         <label htmlFor="pickupTime">Waktu Jemput/Ambil</label>
-                        <input {...register('pickupTime')} type="time" id='pickupTime' />
+                        <input {...register('pickupTime', {required: true})} type="time" id='pickupTime' />
                     </div>
 
                     <div className="flex flex-col">
                         <label htmlFor="seats">Jumlah Penumpang (optional)</label>
-                        <select {...register('capacity')} id="seats" defaultValue={capacity ? capacity : ''}>
+                        <select {...register('capacity', {required: true})} id="seats" defaultValue={capacity ? capacity : ''}>
                             <option value="" disabled hidden>Jumlah Penumpang</option>
                             <option value="sm">1-2 Orang</option>
                             <option value="md">2-4 Orang</option>
@@ -109,21 +126,6 @@ const SearchForm = () => {
                     {(cars.length > 0) && 
                         <>
                             {cars
-                                .filter((c) => {
-                                    
-                                    switch (searchParams.get('capacity')) {
-                                        case 'sm':
-                                            return c.capacity < 3
-                                        case 'md':
-                                            return c.capacity < 5 && c.capacity > 2
-                                        case 'lg':
-                                            return c.capacity < 7 && c.capacity > 4
-                                        case 'xl':
-                                            return c.capacity > 6
-                                        default:
-                                            return true                                    
-                                    }
-                                })
                                 .map((c, i) => {
                                     return (
                                         <CarSearchResultItem key={i} car={c} />

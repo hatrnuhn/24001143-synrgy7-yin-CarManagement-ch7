@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import CarItemCard, {CarItemCardProp} from "../../components/CarItemCard"
 import useAxios from "../../axios"
 import CarDeleteConfirm from "../../components/CarDeleteConfirm"
@@ -15,8 +15,8 @@ const Cars = () => {
 
     const [carId, setCarId] = useState('')
     
-    const axios = useAxios()
-
+    const axios = useRef(useAxios()).current
+    
     useLayoutEffect(() => {
         const fetchCars = async () => {
             const response = await axios.get('/cars')

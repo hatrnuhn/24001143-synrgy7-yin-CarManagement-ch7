@@ -1,4 +1,5 @@
 import { AdminLoginPage, AdminLogoutPage } from './Admin'
+import { UserLoginPage } from './User'
 import DashboardPage from './Dashboard'
 import CarAddPage from './Dashboard/CarAdd'
 import CarEditPage from './Dashboard/CarEdit'
@@ -14,5 +15,6 @@ export {
     DashboardPage,
     HomePage,
     SearchPage,
-    PlaygroundPage
+    PlaygroundPage,
+    UserLoginPage
 }

@@ -1,15 +1,21 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { Navigate } from "react-router"
+import { useEffect, useRef, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import useAxios from "../../../axios"
-import Forbidden from "../../../components/Forbidden"
+import useAxios from "../../axios"
+import { Navigate } from "react-router-dom"
+import Forbidden from "../../components/Forbidden"
 
 type LoginValues = {
     email: string,
     password: string
 }
 
-const AdminLogin = () => {
+const UserLogin = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [isForbidden, setIsForbidden] = useState(false)
+    const axios = useRef(useAxios()).current
+    const [role, setRole] = useState<'user' | 'admin' | 'super'>()
+
     const {register, handleSubmit} = useForm({
         defaultValues: {
             email: '',
@@ -18,16 +24,9 @@ const AdminLogin = () => {
         mode: 'onSubmit'
     })
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [isForbidden, setIsForbidden] = useState(false)
-    const [role, setRole] = useState<'user' | 'admin' | 'super'>()
-    const [isLoading, setIsLoading] = useState(true)
-
-    const axios = useRef(useAxios()).current
-
     const onSubmit: SubmitHandler<LoginValues> = async (data) => {
         try {
-            await axios.post('/auth/login', {...data, role: 'admin'})
+            await axios.post('/auth/login', {...data, role: 'user'})
 
             setIsAuthenticated(true)
         } catch (err) {
@@ -42,9 +41,9 @@ const AdminLogin = () => {
                 await axios.get('/auth/refresh-access') // checks refreshToken
                 const me = await axios.get('/users/me')
 
-                if (!me.data.admin) {
-                    setRole(me.data.super ? 'super' : 'user')
+                if (me.data.admin || me.data.super) {
                     setIsForbidden(true)
+                    setRole(me.data.admin ? 'admin' : 'super')
                     throw new Error('Forbidden / not authorized')
                 }
 
@@ -60,33 +59,6 @@ const AdminLogin = () => {
         checkRefreshToken()
     }, [axios])
 
-    useLayoutEffect(() => {
-        const adminLoginStylesLink = document.createElement('link')
-        const appStyleElementDev = document.querySelector('style[data-vite-dev-id*="App.css"]') // FOR DEVELOPMENT
-        const appStyleElementProd = document.querySelector('link[href^="/assets/index"]') // FOR PRODUCITON (COMPILED)
-        
-        const switchStyles = () => {
-            adminLoginStylesLink.rel='stylesheet'
-            adminLoginStylesLink.href='../styles/AdminLogin.css'
-            
-            document.head.appendChild(adminLoginStylesLink)
-            if (appStyleElementDev)
-                document.head.removeChild(appStyleElementDev)
-            if (appStyleElementProd)
-                document.head.removeChild(appStyleElementProd)
-        }
-
-        switchStyles()
-
-        return () => {
-            document.head.removeChild(adminLoginStylesLink)
-            if (appStyleElementDev)
-                document.head.append(appStyleElementDev)
-            if (appStyleElementProd)
-                document.head.append(appStyleElementProd)
-        }
-    }, [])
-
     if (isLoading) return <h1>Please wait</h1>
     else if (isForbidden) return <Forbidden role={role!} />
     else return (
@@ -98,7 +70,7 @@ const AdminLogin = () => {
                         <div className="login-container w-full h-full flex justify-center md:w-1/3 md:absolute md:right-0 bg-white">
                             <div className="content w-3/4 flex flex-col justify-center gap-8">
                                 <div className="rectangle bg-bcr-slighterlightblue"></div>
-                                <h1>Welcome, BCR Admin</h1>
+                                <h1>Welcome, Dear Customer</h1>
                                 <form className="form flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="flex flex flex-col gap-2">
                                         <label htmlFor="email">Email</label>
@@ -107,18 +79,17 @@ const AdminLogin = () => {
                 
                                     <div className="flex flex-col gap-2">
                                         <label htmlFor="password">Password</label>
-                                        <input {...register('password')} type="password" id="password" placeholder="Enter password here" className="rounded-md h-10 border-2 indent-2"/>
+                                        <input {...register('password')} type="password" id="password" placeholder="Enter your password here" className="rounded-md h-10 border-2 indent-2"/>
                                     </div>
                                     <button type="submit" className="bg-bcr-blue p-2 rounded-md text-white font-bold border mt-1">Sign In</button>
                                 </form>
                             </div>
                         </div>
                     </div> : 
-                    <Navigate to='/admin/dashboard' />
+                    <Navigate to='/' />
                 )
             }
         </>
-    )
-}
+    )}
 
-export default AdminLogin
+export default UserLogin

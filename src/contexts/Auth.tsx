@@ -1,21 +1,35 @@
-import React, { createContext, useState } from "react"
+import { createContext, Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+
+export type User = {
+    userId: number,
+    username: string,
+    email: string,
+}
+
+export type Admin = {
+    adminId: number,
+    username: string,
+    email: string,
+}
 
 export type AuthContextType = {
-    isAuthenticated: boolean,
-    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
-    isLoading: boolean,
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    user: User | null,
+    setUser: Dispatch<SetStateAction<User | null>>,
+    admin: Admin | null,
+    setAdmin: Dispatch<SetStateAction<Admin | null>>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState(true)
+const AuthProvider: FC<{children: ReactNode}> = ({children}) => {
+    const [user, setUser] = useState<User | null>(null)
+    const [admin, setAdmin] = useState<Admin | null>(null)
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, isLoading, setIsLoading }}>
-            {children}
+        <AuthContext.Provider value={{ user,  setUser, admin, setAdmin }}>
+            {children}            
         </AuthContext.Provider>
     )
 }
+
+export default AuthProvider

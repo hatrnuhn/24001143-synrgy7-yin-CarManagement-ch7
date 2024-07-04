@@ -3,6 +3,7 @@ import CarsPage from './Cars'
 import OrdersPage from './Orders'
 import { DashboardContextType, DashboardContext } from '../../contexts/Dashboard'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext, AuthContextType } from '../../contexts/Auth'
 
 
 type PageKey = 'orders' | 'cars' | ''
@@ -13,6 +14,8 @@ type DashboardProps = {
 
 const Dashboard: FC<DashboardProps> = ({ content }) => {
     const [page, setPage] = useState<PageKey>(content ? '' : 'cars')
+
+    const {admin} = useContext(AuthContext) as AuthContextType
 
     const navigate = useNavigate()
 
@@ -149,7 +152,7 @@ const Dashboard: FC<DashboardProps> = ({ content }) => {
                             </div>
                             <div className="profile flex gap-2 items-center">
                                 <div className="image bg-bcr-slighterlightblue h-10 w-10 flex justify-center items-center rounded-full">U</div>
-                                <p className="sm:hidden">Unis Badri</p>
+                                <p className="sm:hidden">{admin?.username}</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-chevron-down sm:hidden" viewBox="0 0 16 16">
                                     <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
                                 </svg>
