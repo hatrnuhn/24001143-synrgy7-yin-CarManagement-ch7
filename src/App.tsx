@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css'
 import { AdminLoginPage, DashboardPage, HomePage, SearchPage, PlaygroundPage, AdminLogoutPage, CarAddPage, CarEditPage, UserLoginPage } from './pages'
-import { AdminProtected } from './components';
+import AdminProtected from './components/AdminProtected';
 import DashboardRouter from './components/DashboardRouter';
 import { DashboardContextProvider } from './contexts/Dashboard';
 import AuthProvider from './contexts/Auth';
