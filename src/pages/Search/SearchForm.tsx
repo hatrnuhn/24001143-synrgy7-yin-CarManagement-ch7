@@ -59,7 +59,7 @@ const SearchForm = () => {
                     }
             })
         )
-    }, [axios])
+    }, [axios, searchParams])
 
     const onSubmit: SubmitHandler<SearchFormType> = async (data, event) => {
         event?.preventDefault()

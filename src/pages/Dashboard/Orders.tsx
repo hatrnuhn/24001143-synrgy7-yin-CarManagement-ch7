@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import useAxios from "../../axios"
 import { AxiosError } from "axios"
@@ -73,13 +73,15 @@ const Orders = () => {
         }
     }
 
+    const fetchOrdersMemoized = useCallback(fetchOrders, [axios, getValues])
+
     const onSubmit = async () => {
-        fetchOrders()
+        fetchOrdersMemoized()
     }
 
     useEffect(() => {
-        fetchOrders()
-    }, [])
+        fetchOrdersMemoized()
+    }, [fetchOrdersMemoized])
 
     return (
         <>
